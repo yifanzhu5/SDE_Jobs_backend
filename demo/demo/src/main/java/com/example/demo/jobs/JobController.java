@@ -1,4 +1,4 @@
-package com.example.demo.student;
+package com.example.demo.job;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,36 +8,37 @@ import java.time.Month;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/student")
-public class StudentController {
-    private final StudentService studentService;
+@RequestMapping(path = "api/v1/job")
+public class JobController {
+    private final JobService jobService;
 
     @Autowired
-    public StudentController(StudentService StudentService) {
-        this.studentService = StudentService;
+    public JobController(JobService JobService) {
+        this.jobService = JobService;
     }
     @GetMapping
-    public List<Student> getStudents() {
-
-        return studentService.getStudents();
+    public List<Job> getJobs() {
+        //TODO for jobs
+        return jobService.getJobs();
     }
+
 
     @PostMapping
-    public void registerNewStudent(@RequestBody Student student) {
-        studentService.addNewStudent(student);
+    public void registerNewJob(@RequestBody Job job) {
+        jobService.addNewJob(job);
     }
 
-    @PutMapping(path = "{studentId}")
-    public void updateStudent(
-            @PathVariable("studentId") Long studentId,
+    @PutMapping(path = "{jobId}")
+    public void updateJob(
+            @PathVariable("jobId") Long jobId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email
     ) {
-        studentService.updateStudent(studentId, name, email);
+        jobService.updateJob(jobId, name, email);
     }
 
-    @DeleteMapping(path = "{studentId}")
-    public void deleteStudent(@PathVariable("studentId") Long studentId) {
-        studentService.deleteStudent(studentId);
+    @DeleteMapping(path = "{jobId}")
+    public void deleteJob(@PathVariable("jobId") Long jobId) {
+        jobService.deleteJob(jobId);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.demo.student;
+package com.example.demo.job;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,62 +11,69 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class StudentService {
-    private final StudentRepository studentRepository;
+public class JobService {
+    private final JobRepository jobRepository;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
+    public JobService(JobRepository jobRepository) {
+        this.jobRepository = jobRepository;
     }
 
-    public List<Student> getStudents() {
-        return studentRepository.findAll();
-    }
+    public List<Job> getJobs() {
+        //return jobRepository.findall();
+        return jobRepository.//filter//page
 
-    public void addNewStudent(Student student) {
-        Optional<Student> studentOptional = studentRepository.
-                findStudentByEmail(student.getEmail());
-        if (studentOptional.isPresent()) {
+
+    }
+     // JPA filter 实现
+    private List<Job> filtered(List<Job>){
+        //
+        return
+    }
+    public void addNewJob(Job job) {
+        Optional<Job> jobOptional = jobRepository.
+                findJobByEmail(job.getEmail());
+        if (jobOptional.isPresent()) {
             throw new IllegalStateException("email taken");
         }
-        studentRepository.save(student);
+        jobRepository.save(job);
     }
 
-    public void deleteStudent(Long studentId) {
-        boolean exists = studentRepository.existsById(studentId);
+    public void deleteJob(Long jobId) {
+        boolean exists = jobRepository.existsById(jobId);
         if (!exists) {
             throw new IllegalStateException(
-                    "student with id" + studentId + "does not exists"
+                    "job with id" + jobId + "does not exists"
             );
         }
-        studentRepository.deleteById(studentId);
+        jobRepository.deleteById(jobId);
     }
 
     @Transactional
-    public void updateStudent(
-            Long studentId,
+    public void updateJob(
+            Long jobId,
             String name,
             String email) {
-        Student student = studentRepository.findById(studentId)
+        Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new IllegalStateException(
-                        "student with id " + studentId + " does not exist"
+                        "job with id " + jobId + " does not exist"
                 ));
 
         if (name != null &&
             name.length() > 0 &&
-            !Objects.equals(student.getName(), name)) {
-            student.setName(name);
+            !Objects.equals(job.getName(), name)) {
+            job.setName(name);
         }
 
         if (email != null &&
                 email.length() > 0 &&
-                !Objects.equals(student.getEmail(), email)) {
-            Optional<Student> studentOptional = studentRepository
-                    .findStudentByEmail(email);
-            if (studentOptional.isPresent()) {
+                !Objects.equals(job.getEmail(), email)) {
+            Optional<Job> jobOptional = jobRepository
+                    .findJobByEmail(email);
+            if (jobOptional.isPresent()) {
                 throw new IllegalStateException("email taken");
             }
-            student.setEmail(email);
+            job.setEmail(email);
         }
     }
 }

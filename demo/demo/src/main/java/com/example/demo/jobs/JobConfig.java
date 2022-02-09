@@ -1,4 +1,4 @@
-package com.example.demo.student;
+package com.example.demo.job;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -9,18 +9,18 @@ import java.time.Month;
 import java.util.List;
 
 @Configuration
-public class StudentConfig {
+public class JobConfig {
     @Bean
     CommandLineRunner CommandLineRunner(
-            StudentRepository repository) {
+            JobRepository repository) {
         return args -> {
-            Student mariam = new Student(
+            Job mariam = new Job(
                     "Mariam",
                     "mariam.jamal@gmail.com",
                     LocalDate.of(2000, Month.JANUARY, 5)
             );
 
-            Student alex = new Student(
+            Job alex = new Job(
                     "Alex",
                     "alex@gmail.com",
                     LocalDate.of(2004, Month.JANUARY, 5)
