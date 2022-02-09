@@ -26,54 +26,68 @@ public class JobService {
 
     }
      // JPA filter 实现
-    private List<Job> filtered(List<Job>){
+    private List<Job> filtered(jobRepository){
         //
-        return
-    }
-    public void addNewJob(Job job) {
-        Optional<Job> jobOptional = jobRepository.
-                findJobByEmail(job.getEmail());
-        if (jobOptional.isPresent()) {
-            throw new IllegalStateException("email taken");
-        }
-        jobRepository.save(job);
-    }
+        List<String> company = jobRepository.findBycompnay();
 
-    public void deleteJob(Long jobId) {
-        boolean exists = jobRepository.existsById(jobId);
-        if (!exists) {
-            throw new IllegalStateException(
-                    "job with id" + jobId + "does not exists"
-            );
+        if () {
+            //check list,  if keyword in List
+            //throw exception
         }
-        jobRepository.deleteById(jobId);
+        //...
+
+        List<String> url = jobRepository.findByurl();
+
+
+        List=jobRepository.findall();
+        List2=List.filter;
+        return jobRepository.findJob
     }
+    //private List<Job> keyword()
+//    public void addNewJob(Job job) {
+//        Optional<Job> jobOptional = jobRepository.
+//                findJobByEmail(job.getEmail());
+//        if (jobOptional.isPresent()) {
+//            throw new IllegalStateException("email taken");
+//        }
+//        jobRepository.save(job);
+//    }
 
-    @Transactional
-    public void updateJob(
-            Long jobId,
-            String name,
-            String email) {
-        Job job = jobRepository.findById(jobId)
-                .orElseThrow(() -> new IllegalStateException(
-                        "job with id " + jobId + " does not exist"
-                ));
-
-        if (name != null &&
-            name.length() > 0 &&
-            !Objects.equals(job.getName(), name)) {
-            job.setName(name);
-        }
-
-        if (email != null &&
-                email.length() > 0 &&
-                !Objects.equals(job.getEmail(), email)) {
-            Optional<Job> jobOptional = jobRepository
-                    .findJobByEmail(email);
-            if (jobOptional.isPresent()) {
-                throw new IllegalStateException("email taken");
-            }
-            job.setEmail(email);
-        }
-    }
+//    public void deleteJob(Long jobId) {
+//        boolean exists = jobRepository.existsById(jobId);
+//        if (!exists) {
+//            throw new IllegalStateException(
+//                    "job with id" + jobId + "does not exists"
+//            );
+//        }
+//        jobRepository.deleteById(jobId);
+//    }
+    // ***********just for copy******************
+//    @Transactional
+//    public void updateJob(
+//            Long jobId,
+//            String name,
+//            String email) {
+//        Job job = jobRepository.findById(jobId)
+//                .orElseThrow(() -> new IllegalStateException(
+//                        "job with id " + jobId + " does not exist"
+//                ));
+//
+//        if (name != null &&
+//            name.length() > 0 &&
+//            !Objects.equals(job.getName(), name)) {
+//            job.setName(name);
+//        }
+//
+//        if (email != null &&
+//                email.length() > 0 &&
+//                !Objects.equals(job.getEmail(), email)) {
+//            Optional<Job> jobOptional = jobRepository
+//                    .findJobByEmail(email);
+//            if (jobOptional.isPresent()) {
+//                throw new IllegalStateException("email taken");
+//            }
+//            job.setEmail(email);
+//        }
+//    }
 }

@@ -22,12 +22,11 @@ public class JobController {
         return jobService.getJobs();
     }
 
-
     @PostMapping
     public void registerNewJob(@RequestBody Job job) {
         jobService.addNewJob(job);
     }
-
+    // just for copy
     @PutMapping(path = "{jobId}")
     public void updateJob(
             @PathVariable("jobId") Long jobId,
