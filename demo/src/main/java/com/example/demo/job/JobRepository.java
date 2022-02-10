@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface JobRepository
-        extends JpaRepository<Job,Long> {
-    @Query("SELECT s FROM Student s WHERE s.email = ?1")
-    Optional<Job> findJobByEmail(String email);
+public interface JobRepository extends JpaRepository<Job,Long> {
+
+//    @Query("select s from Job s where s.from_url=?1")
+//    Optional<Job> findJobByFrom_url(String href);
 }
