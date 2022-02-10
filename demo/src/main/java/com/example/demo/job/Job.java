@@ -56,9 +56,9 @@ public class Job {
     @Column(
             name = "publish_time",
             nullable = true,
-            columnDefinition = "TEXT"
+            columnDefinition = "INT"
     )
-    private String publish_time;
+    private Integer publish_time;
 
     @Column(
             name = "description",
@@ -140,7 +140,7 @@ public class Job {
     public Job() {
     }
 
-    public Job(String title, String locations, String company, String publish_time, String description, String apply_url, String from_url, String basic_qualifications, String city, String job_category, String job_family, String job_schedule_type, String preferred_qualifications, String update_time, String new_grad) {
+    public Job(String title, String locations, String company, Integer publish_time, String description, String apply_url, String from_url, String basic_qualifications, String city, String job_category, String job_family, String job_schedule_type, String preferred_qualifications, String update_time, String new_grad) {
         this.title = title;
         this.locations = locations;
         this.company = company;
@@ -158,7 +158,7 @@ public class Job {
         this.new_grad = new_grad;
     }
 
-    public Job(Long id, String title, String locations, String company, String publish_time, String description, String apply_url, String from_url, String basic_qualifications, String city, String job_category, String job_family, String job_schedule_type, String preferred_qualifications, String update_time, String new_grad) {
+    public Job(Long id, String title, String locations, String company, Integer publish_time, String description, String apply_url, String from_url, String basic_qualifications, String city, String job_category, String job_family, String job_schedule_type, String preferred_qualifications, String update_time, String new_grad) {
         this.id = id;
         this.title = title;
         this.locations = locations;
@@ -209,11 +209,11 @@ public class Job {
         this.company = company;
     }
 
-    public String getPublish_time() {
+    public Integer getPublish_time() {
         return publish_time;
     }
 
-    public void setPublish_time(String publish_time) {
+    public void setPublish_time(Integer publish_time) {
         this.publish_time = publish_time;
     }
 
