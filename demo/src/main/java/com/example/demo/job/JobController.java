@@ -20,21 +20,16 @@ public class JobController {
         this.jobService = jobService;//dependency injection
     }
 
-    @GetMapping("/jobs")
-    public JSONObject getAllJobs() {//List<Job>
-        return jobService.getAllJobs();
-    }
-
-
-    public void returnJobs(@RequestBody Job job) {
-        jobService.returnJob(job);
+    @GetMapping("/jobs/{pgid}")
+    public JSONObject getAllJobs(@PathVariable int pgid) {//List<Job>
+        return jobService.getAllJobs(pgid);
     }
 
     /**
      * Search by keywords + filter by locations/companies
      *
      * @param keywords  - in search bar
-     * @param current_page      - page index from front end
+     * @param current_page - page index obtained from front end
      * @param page_size - how many in a page. 20 or 50 or 100
      * @param locations - locations
      * @param companies - companies
@@ -42,25 +37,13 @@ public class JobController {
      */
     @PostMapping(value = "/search")
     @ResponseBody
-    public String search(@RequestParam(value = "keywords", defaultValue = "") String keywords,
-                         @RequestParam(value = "current_page") int current_page,
-                         @RequestParam(value = "page_size") int page_size,
-                         @RequestParam(value = "locations", defaultValue = "") List<String> locations,
-                         @RequestParam(value = "companies", defaultValue = "") List<String> companies) {
+    public JSONObject search(@RequestParam(value = "keywords", required = false,defaultValue = "") String keywords,
+                             @RequestParam(value = "current_page") int current_page,
+                             @RequestParam(value = "page_size") int page_size,
+                             @RequestParam(value = "locations", required = false,defaultValue = "") List<String> locations,
+                             @RequestParam(value = "companies", required = false,defaultValue = "") List<String> companies) {
 
-        current_page = current_page < 1 || current_page > GlobalConst.MAX_PAGE ? 1 : current_page;
-        List<Job> posInfo = jobService.searchPosition(keywords,locations,companies);
-
-        Map output = new TreeMap();
-        output.put("user", user);
-        output.put("title", ("第" + page + "页"));
-        output.put("keyword", keyword);
-        output.put("orderBy", orderBy);
-        output.put("posInfo", posInfo);
-
-        JSONObject jsonObject = JSONObject.fromObject(output);
-
-        return jsonObject.toString();
+        return jobService.searchPosition(keywords,locations,companies,page_size,current_page);
     }
 
     @DeleteMapping(path = "{jobID}")

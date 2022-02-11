@@ -15,6 +15,9 @@ public class GlobalConst {
     //主页最大显示职位页数
     public static int MAX_PAGE = 100;
 
+    // how many in a page - fixed
+    public static int PAGE_SIZE_MAX = 20;
+
     //用户数组最大长度
     public static int MAX_ARRAY_SIZE = 100;
 
