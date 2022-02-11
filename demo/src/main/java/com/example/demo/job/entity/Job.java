@@ -1,4 +1,4 @@
-package com.example.demo.job;
+package com.example.demo.job.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -16,15 +16,15 @@ import static javax.persistence.GenerationType.SEQUENCE;
 )
 public class Job {
     @Id
-    @SequenceGenerator(
-            name = "job_sequence",
-            sequenceName = "job_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = SEQUENCE,
-            generator = "job_sequence"
-    )
+//    @SequenceGenerator(
+//            name = "job_sequence",
+//            sequenceName = "job_sequence",
+//            allocationSize = 1
+//    )
+//    @GeneratedValue(
+//            strategy = SEQUENCE,
+//            generator = "job_sequence"
+//    )
 
     @Column(
             name = "id",
