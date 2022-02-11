@@ -27,10 +27,11 @@ public class JobService {//service class
     }
 
     //return json after paging
-    public JSONObject returnJobs(List<Job> pos,
+    public JSONObject returnJobs(List<Job> jobs,
                                  int page_size,
                                  int current_page) {
-        long count = pos.size();
+        long count = jobs.size();
+        int max_page_size = page_size;
         int pagesNum = (int) Math.ceil(count / page_size);
         page_size = current_page != pagesNum ? page_size : (int) (count % page_size);
         current_page = current_page < 1 || current_page > GlobalConst.MAX_PAGE || current_page > pagesNum ? 1 : current_page;
@@ -39,11 +40,14 @@ public class JobService {//service class
         jsonObject.put("current_page", current_page);
         jsonObject.put("page_size", page_size);
 
-        //build JSONArray from a List object
         //paging
-
-        //
-        JSONArray json_jobs = JSONArray.fromObject(pos);
+        int begin = (current_page - 1) * max_page_size;
+        int end = begin + page_size;
+        List<Job> jobs_current_page = new ArrayList();
+        for (int i = begin; i < end; i++) {
+            jobs_current_page.add(jobs.get(i))
+        }
+        JSONArray json_jobs = JSONArray.fromObject(jobs_current_page);
         jsonObject.put("jobs", json_jobs);
         return jsonObject;
     }
