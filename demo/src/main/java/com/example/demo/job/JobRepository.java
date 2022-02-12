@@ -25,6 +25,14 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findJobsByLocations(String locations);
 
     //CONCAT_WS('', column1, column2, column3) LIKE '%keyword%' may affect performance
-    @Query(value = "select s from Job s where s.title like :k or s.description like :k or s.company like :k or s.basic_qualifications like :k or s.locations like :k or s.job_category like :k or s.team like :k")
-    List<Job> findJobsByKeywords(@Param("k") String keywords);
+//    @Query(value = "select s from Job s where s.title like %?1%" +
+//            " or s.description like %?1% or s.company like %?1%" +
+//            " or s.basic_qualifications like %?1%" +
+//            " or s.locations like %?1%" +
+//            " or s.job_category like %?1%" +
+//            " or s.team like %?1%" +
+//            " or s.company like %?1%" +
+//            " or s.preferred_qualifications like %?1%")
+    @Query(value="select s from Job s where CONCAT(s.title,' ',s.description,' ',s.basic_qualifications,' ',s.locations,' ',s.company,' ',s.job_category,' ',s.team,' ',s.preferred_qualifications) like %?1%")
+    List<Job> findJobsByKeywords(String keywords);
 }
