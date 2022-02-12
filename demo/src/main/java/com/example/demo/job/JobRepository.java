@@ -15,9 +15,16 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 //    @Query(value="select s from Job s where s.company=?1 and s.locations=?2",nativeQuery = true)
 //    List<Job> findJobsByCompanyAndLocations(String company,String locations);
 
-    @Query(value="select s from Job s where s.company in :companies")
+    @Query(value = "select s from Job s where s.company in :companies")
     List<Job> findJobsByCompanyIn(@Param("companies") List<String> companiesL);
 
-    @Query(value="select s from Job s where s.locations in :locs")
+    @Query(value = "select s from Job s where s.locations in :locs")
     List<Job> findJobsByLocationsIn(@Param("locs") List<String> locationsL);
+
+    @Query(value = "select s from Job s where s.locations =?1")
+    List<Job> findJobsByLocations(String locations);
+
+    //CONCAT_WS('', column1, column2, column3) LIKE '%keyword%' may affect performance
+    @Query(value = "select s from Job s where s.title like :k or s.description like :k or s.company like :k or s.basic_qualifications like :k or s.locations like :k or s.job_category like :k or s.team like :k")
+    List<Job> findJobsByKeywords(@Param("k") String keywords);
 }

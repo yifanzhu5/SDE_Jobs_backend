@@ -137,6 +137,13 @@ public class Job {
     )
     private String new_grad;
 
+    @Column(
+            name = "team",
+            nullable = true,
+            columnDefinition = "TEXT"
+    )
+    private String team;
+
     public Job() {
     }
 

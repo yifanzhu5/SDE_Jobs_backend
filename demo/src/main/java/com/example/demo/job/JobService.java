@@ -28,40 +28,58 @@ public class JobService {//service class
 
     //return json after paging
     public JSONObject returnJobs(List<Job> jobs,
-                                 int page_size,
-                                 int current_page) {
+                                 Integer page_size,
+                                 Integer current_page) {
         long count = jobs.size();
-        int max_page_size = page_size;
-        int pagesNum = (int) Math.ceil(count / page_size);
-        page_size = current_page != pagesNum ? page_size : (int) (count % page_size);
-        current_page = current_page < 1 || current_page > GlobalConst.MAX_PAGE || current_page > pagesNum ? 1 : current_page;
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("count", count);
-        jsonObject.put("current_page", current_page);
-        jsonObject.put("page_size", page_size);
+        if (count != 0) {
+            int max_page_size = page_size;
+            int pagesNum = (int) Math.ceil((double) count / page_size);
+            page_size = current_page != pagesNum ? page_size : (int) (count % page_size);
+            current_page = current_page < 1 || current_page > GlobalConst.MAX_PAGE || current_page > pagesNum ? 1 : current_page;
 
-        //paging
-        int begin = (current_page - 1) * max_page_size;
-        int end = begin + page_size;
-        List<Job> jobs_current_page = new ArrayList();
-        for (int i = begin; i < end; i++) {
-            jobs_current_page.add(jobs.get(i))
+
+            jsonObject.put("count", count);
+            jsonObject.put("current_page", current_page);
+            jsonObject.put("page_size", page_size);
+            //paging
+            int begin = (current_page - 1) * max_page_size;
+            int end = begin + page_size;
+            List<Job> jobs_current_page = new ArrayList();
+            for (int i = begin; i < end; i++) {
+                jobs_current_page.add(jobs.get(i));
+            }
+            JSONArray json_jobs = JSONArray.fromObject(jobs_current_page);
+            jsonObject.put("jobs", json_jobs);
         }
-        JSONArray json_jobs = JSONArray.fromObject(jobs_current_page);
-        jsonObject.put("jobs", json_jobs);
+        else{//no search result
+            jsonObject.put("count", 0);
+            jsonObject.put("current_page", 1);
+            jsonObject.put("page_size", 0);
+            List<Job> jobs_current_page = new ArrayList();
+            JSONArray json_jobs = JSONArray.fromObject(jobs_current_page);
+            jsonObject.put("jobs", json_jobs);
+        }
         return jsonObject;
     }
 
-
     public JSONObject searchPosition(String keywords,
-                                     List<String> locations,
+                                     List<String> locations,//
                                      List<String> companies,
-                                     int page_size,
-                                     int current_page) {
-        List<Job> jobsList = jobRepository.findJobsByLocationsIn(locations);
-        List<Job> tmp2 = jobRepository.findJobsByCompanyIn(companies);
-
-        jobsList.retainAll(tmp2);// get intersection
+                                     Integer page_size,
+                                     Integer current_page) {
+        List<Job> jobsList = jobRepository.findAll();
+        if (!locations.isEmpty()) {
+            jobsList = jobRepository.findJobsByLocationsIn(locations);
+        }
+        if (!companies.isEmpty()) {
+            List<Job> tmp2 = jobRepository.findJobsByCompanyIn(companies);
+            jobsList.retainAll(tmp2);// get intersection
+        }
+        if(!keywords.isBlank()){
+            List<Job> onSearch = jobRepository.findJobsByKeywords(keywords);
+            jobsList.retainAll(onSearch);// get intersection
+        }
         return returnJobs(jobsList, page_size, current_page);
     }
 
