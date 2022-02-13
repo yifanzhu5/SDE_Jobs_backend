@@ -23,6 +23,7 @@ public class JobService {//service class
 
     public JSONObject getAllJobs(int pgid) {
         List<Job> lAll = jobRepository.findAll();
+        // TODO:  fetch db page by page
         return returnJobs(lAll, GlobalConst.PAGE_SIZE_MAX, pgid);
     }
 
@@ -37,8 +38,6 @@ public class JobService {//service class
             int pagesNum = (int) Math.ceil((double) count / page_size);
             page_size = current_page != pagesNum ? page_size : (int) (count % page_size);
             current_page = current_page < 1 || current_page > GlobalConst.MAX_PAGE || current_page > pagesNum ? 1 : current_page;
-
-
             jsonObject.put("count", count);
             jsonObject.put("current_page", current_page);
             jsonObject.put("page_size", page_size);
@@ -69,6 +68,7 @@ public class JobService {//service class
                                      Integer page_size,
                                      Integer current_page) {
         List<Job> jobsList = jobRepository.findAll();
+        // TODO: fetch db page by page
         if (!locations.isEmpty()) {
             jobsList = jobRepository.findJobsByLocationsIn(locations);
         }

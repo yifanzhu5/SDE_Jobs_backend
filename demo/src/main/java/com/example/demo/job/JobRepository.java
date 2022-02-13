@@ -18,6 +18,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     @Query(value = "select s from Job s where s.company in :companies")
     List<Job> findJobsByCompanyIn(@Param("companies") List<String> companiesL);
 
+    //TODO: others
     @Query(value = "select s from Job s where s.locations in :locs")
     List<Job> findJobsByLocationsIn(@Param("locs") List<String> locationsL);
 

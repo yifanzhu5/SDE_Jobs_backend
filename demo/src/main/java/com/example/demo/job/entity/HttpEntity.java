@@ -7,6 +7,7 @@ public class HttpEntity {
     private String keywords;
     private Integer page_size;
     private Integer current_page;
+    //TODO: Optional<String>
     private List<String> locations;
     private List<String> companies;
 
