@@ -36,4 +36,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             " or s.company like %?1%" +
             " or s.preferred_qualifications like %?1%")
     List<Job> findJobsByKeywords(String keywords);
+
+    @Query(value = "select s from Job s where s.has_remote =?1")
+    List<Job> findJobsByHas_remote(Boolean has_remote);
 }

@@ -48,7 +48,7 @@ public class JobController {
     public JSONObject search(@RequestBody HttpEntity httpEntity) {
 
         //parser
-        Boolean has_remote = false;
+        Boolean has_remote = null;
         Integer update_time = null;
         String keywords = null;
         List<String> locations = new ArrayList<>();

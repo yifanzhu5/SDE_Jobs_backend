@@ -36,7 +36,7 @@ public class JobService {//service class
         if (count != 0) {
             int max_page_size = page_size;
             int pagesNum = (int) Math.ceil((double) count / page_size);
-            page_size = current_page != pagesNum ? page_size : (int) (count % page_size);
+            page_size = (current_page != pagesNum && pagesNum != 1) ? page_size : (int) (count % page_size);
             current_page = current_page < 1 || current_page > GlobalConst.MAX_PAGE || current_page > pagesNum ? 1 : current_page;
             jsonObject.put("count", count);
             jsonObject.put("current_page", current_page);
@@ -50,8 +50,7 @@ public class JobService {//service class
             }
             JSONArray json_jobs = JSONArray.fromObject(jobs_current_page);
             jsonObject.put("jobs", json_jobs);
-        }
-        else{//no search result
+        } else {//no search result
             jsonObject.put("count", 0);
             jsonObject.put("current_page", 1);
             jsonObject.put("page_size", 0);
@@ -66,7 +65,9 @@ public class JobService {//service class
                                      List<String> locations,//
                                      List<String> companies,
                                      Integer page_size,
-                                     Integer current_page) {
+                                     Integer current_page,
+                                     Integer update_time,
+                                     Boolean has_remote) {
         List<Job> jobsList = jobRepository.findAll();
         // TODO: fetch db page by page
         if (!locations.isEmpty()) {
@@ -76,7 +77,11 @@ public class JobService {//service class
             List<Job> tmp2 = jobRepository.findJobsByCompanyIn(companies);
             jobsList.retainAll(tmp2);// get intersection
         }
-        if(!keywords.isBlank()){
+        if (has_remote != null) {
+            List<Job> tmp = jobRepository.findJobsByHas_remote(has_remote);
+            jobsList.retainAll(tmp);// get intersection
+        }
+        if (!keywords.isBlank()) {
             List<Job> onSearch = jobRepository.findJobsByKeywords(keywords);
             jobsList.retainAll(onSearch);// get intersection
         }
