@@ -138,23 +138,26 @@ public class Job {
     private Boolean new_grad;
 
     @Column(
-            name = "team",
-            nullable = true,
-            columnDefinition = "TEXT"
-    )
-    private String team;
-
-    @Column(
             name = "has_remote",
             nullable = true,
             columnDefinition = "TINYINT(1)"
     )
     private Boolean has_remote;
 
+    @Column(
+            name = "team",
+            nullable = true,
+            columnDefinition = "TEXT"
+    )
+    private String team;
+
     public Job() {
     }
 
-    public Job(String title, String locations, String company, Integer publish_time, String description, String apply_url, String from_url, String basic_qualifications, String city, String job_category, String job_family, String job_schedule_type, String preferred_qualifications, String update_time, Boolean new_grad, String team, Boolean has_remote) {
+    public Job(String title, String locations, String company, Integer publish_time, String description,
+               String apply_url, String from_url, String basic_qualifications, String city, String job_category,
+               String job_family, String job_schedule_type, String preferred_qualifications, String update_time,
+               Boolean new_grad, String team, Boolean has_remote) {
         this.title = title;
         this.locations = locations;
         this.company = company;
@@ -174,7 +177,10 @@ public class Job {
         this.has_remote = has_remote;
     }
 
-    public Job(Long id, String title, String locations, String company, Integer publish_time, String description, String apply_url, String from_url, String basic_qualifications, String city, String job_category, String job_family, String job_schedule_type, String preferred_qualifications, String update_time, Boolean new_grad, String team, Boolean has_remote) {
+    public Job(Long id, String title, String locations, String company, Integer publish_time, String description,
+               String apply_url, String from_url, String basic_qualifications, String city, String job_category,
+               String job_family, String job_schedule_type, String preferred_qualifications, String update_time,
+               Boolean new_grad, String team, Boolean has_remote) {
         this.id = id;
         this.title = title;
         this.locations = locations;

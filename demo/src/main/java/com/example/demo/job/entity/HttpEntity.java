@@ -1,64 +1,85 @@
 package com.example.demo.job.entity;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class HttpEntity {
-    private String keywords;
-    private Integer page_size;
-    private Integer current_page;
+    private Optional<String> keywords;
+    private Optional<Integer> page_size;
+    private Optional<Integer> current_page;
     //TODO: Optional<String>
-    private List<String> locations;
-    private List<String> companies;
+    private Optional<List<String>> locations;
+    private Optional<List<String>> companies;
+    private Optional<Integer> update_time;
+    private Optional<Boolean> has_remote;
 
-    public String getKeywords() {
+    public Optional<Integer> getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(Optional<Integer> update_time) {
+        this.update_time = update_time;
+    }
+
+    public Optional<Boolean> getHas_remote() {
+        return has_remote;
+    }
+
+    public void setHas_remote(Optional<Boolean> has_remote) {
+        this.has_remote = has_remote;
+    }
+
+    public Optional<String> getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(String keywords) {
+    public void setKeywords(Optional<String> keywords) {
         this.keywords = keywords;
     }
 
-    public Integer getPage_size() {
+    public Optional<Integer> getPage_size() {
         return page_size;
     }
 
-    public void setPage_size(Integer page_size) {
+    public void setPage_size(Optional<Integer> page_size) {
         this.page_size = page_size;
     }
 
-    public Integer getCurrent_page() {
+    public Optional<Integer> getCurrent_page() {
         return current_page;
     }
 
-    public void setCurrent_page(Integer current_page) {
+    public void setCurrent_page(Optional<Integer> current_page) {
         this.current_page = current_page;
     }
 
-    public List<String> getLocations() {
+    public Optional<List<String>> getLocations() {
         return locations;
     }
 
-    public void setLocations(List<String> locations) {
+    public void setLocations(Optional<List<String>> locations) {
         this.locations = locations;
     }
 
-    public List<String> getCompanies() {
+    public Optional<List<String>> getCompanies() {
         return companies;
     }
 
-    public void setCompanies(List<String> companies) {
+    public void setCompanies(Optional<List<String>> companies) {
         this.companies = companies;
     }
 
     public HttpEntity() {
     }
 
-    public HttpEntity(String keywords, Integer page_size, Integer current_page, List<String> locations, List<String> companies) {
+    public HttpEntity(Optional<String> keywords, Optional<Integer> page_size, Optional<Integer> current_page, Optional<List<String>> locations, Optional<List<String>> companies,Optional<Integer> update_time,Optional<Boolean> has_remote) {
         this.keywords = keywords;
         this.page_size = page_size;
         this.current_page = current_page;
         this.locations = locations;
         this.companies = companies;
+        this.update_time=update_time;
+        this.has_remote=has_remote;
     }
 }
