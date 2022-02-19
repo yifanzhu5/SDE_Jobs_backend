@@ -6,6 +6,8 @@ import com.example.demo.job.entity.Job;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -22,42 +24,23 @@ public class JobService {//service class
     }
 
     public JSONObject getAllJobs(int pgid) {
-        List<Job> lAll = jobRepository.findAll();
-        // TODO:  fetch db page by page
-        return returnJobs(lAll, GlobalConst.PAGE_SIZE_MAX, pgid);
+        Page<Job> jobs = jobRepository.findAll(
+                PageRequest.of(
+                        //page starts from 0 in pageable
+                        pgid - 1,
+                        GlobalConst.PAGE_SIZE_MAX
+                ));
+        return returnJobs(jobs);
     }
 
     //return json after paging
-    public JSONObject returnJobs(List<Job> jobs,
-                                 Integer page_size,
-                                 Integer current_page) {
-        long count = jobs.size();
+    public JSONObject returnJobs(Page<Job> jobs) {
         JSONObject jsonObject = new JSONObject();
-        if (count != 0) {
-            int max_page_size = page_size;
-            int pagesNum = (int) Math.ceil((double) count / page_size);
-            page_size = (current_page != pagesNum && pagesNum != 1) ? page_size : (int) (count % page_size);
-            current_page = current_page < 1 || current_page > GlobalConst.MAX_PAGE || current_page > pagesNum ? 1 : current_page;
-            jsonObject.put("count", count);
-            jsonObject.put("current_page", current_page);
-            jsonObject.put("page_size", page_size);
-            //paging
-            int begin = (current_page - 1) * max_page_size;
-            int end = begin + page_size;
-            List<Job> jobs_current_page = new ArrayList();
-            for (int i = begin; i < end; i++) {
-                jobs_current_page.add(jobs.get(i));
-            }
-            JSONArray json_jobs = JSONArray.fromObject(jobs_current_page);
-            jsonObject.put("jobs", json_jobs);
-        } else {//no search result
-            jsonObject.put("count", 0);
-            jsonObject.put("current_page", 1);
-            jsonObject.put("page_size", 0);
-            List<Job> jobs_current_page = new ArrayList();
-            JSONArray json_jobs = JSONArray.fromObject(jobs_current_page);
-            jsonObject.put("jobs", json_jobs);
-        }
+        jsonObject.put("count", jobs.getTotalElements());
+        jsonObject.put("current_page", jobs.getNumber() + 1);
+        jsonObject.put("page_size", jobs.getNumberOfElements());
+        JSONArray json_jobs = JSONArray.fromObject(jobs.getContent());
+        jsonObject.put("jobs", json_jobs);
         return jsonObject;
     }
 
@@ -68,33 +51,21 @@ public class JobService {//service class
                                      Integer current_page,
                                      Integer update_time,
                                      Boolean has_remote) {
-        List<Job> jobsList = jobRepository.findAll();
-        // TODO: fetch db page by page
-        if (!locations.isEmpty()) {
-            jobsList = jobRepository.findJobsByLocationsIn(locations);
+        if(keywords.isBlank()){
+            keywords="";
         }
-        if (!companies.isEmpty()) {
-            List<Job> tmp2 = jobRepository.findJobsByCompanyIn(companies);
-            jobsList.retainAll(tmp2);// get intersection
-        }
-        if (has_remote != null) {
-            List<Job> tmp = jobRepository.findJobsByHas_remote(has_remote);
-            jobsList.retainAll(tmp);// get intersection
-        }
-        if (!keywords.isBlank()) {
-            List<Job> onSearch = jobRepository.findJobsByKeywords(keywords);
-            jobsList.retainAll(onSearch);// get intersection
-        }
-        return returnJobs(jobsList, page_size, current_page);
-    }
-
-
-    public void deleteJob(Long jobId) {
-        boolean exists = jobRepository.existsById(jobId);
-        if (!exists) {
-            throw new IllegalStateException("job with id " + jobId + " does not exist");
-        }
-        jobRepository.deleteById(jobId);
+        Page<Job> jobs = jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords(
+                companies,
+                locations,
+                has_remote,
+                keywords,
+                PageRequest.of(
+                        //page starts from 0 in pageable
+                        current_page - 1,
+                        page_size
+                )
+        );
+        return returnJobs(jobs);
     }
 
 //    @Transactional
