@@ -54,11 +54,16 @@ public class JobService {//service class
         if(keywords.isBlank()){
             keywords="";
         }
+
+        List<String> mainLocations = Arrays.asList("Toronto", "Vancouver", "Montreal", "Ottawa");
+        List<String> others = locations.contains("Others") ? mainLocations : new ArrayList<>();
+
         Page<Job> jobs = jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords(
                 companies,
                 locations,
                 has_remote,
                 keywords,
+                others,
                 PageRequest.of(
                         //page starts from 0 in pageable
                         current_page - 1,
