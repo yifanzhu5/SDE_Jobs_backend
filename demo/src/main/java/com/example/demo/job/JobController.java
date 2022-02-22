@@ -35,15 +35,14 @@ public class JobController {
 
         //parser
         Boolean has_remote = null;
-        Integer update_time = null;
-        String keywords = "";
-        List<String> locations = new ArrayList<>();
+        String keywords = null;
+        List<String> city = new ArrayList<>();
         List<String> companies = new ArrayList<>();
-        if (httpEntity.getKeywords().isPresent()){
-            keywords = httpEntity.getKeywords().get();
-        }
         try {
-            locations = httpEntity.getLocations().get();
+            keywords = httpEntity.getKeywords().get();
+        }catch (Exception e){}
+        try {
+            city = httpEntity.getCity().get();
         }catch (Exception e){}
         try {
             companies = httpEntity.getCompanies().get();
@@ -51,13 +50,10 @@ public class JobController {
         Integer page_size =httpEntity.getPage_size().get();
         Integer current_page = httpEntity.getCurrent_page().get();
         try{
-            update_time = httpEntity.getUpdate_time().get();
-        }catch (Exception e){}
-        try{
             has_remote = httpEntity.getHas_remote().get();
         }catch (Exception e){}
         //invoke search
-        return jobService.searchPosition(keywords,locations,companies,page_size,current_page,update_time,has_remote);
+        return jobService.searchPosition(keywords,city,companies,page_size,current_page,has_remote);
     }
         /*return jobService.searchPosition(
                 httpEntity.getKeywords(),

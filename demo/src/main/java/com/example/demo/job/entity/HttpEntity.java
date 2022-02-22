@@ -9,17 +9,17 @@ public class HttpEntity {
     private Optional<Integer> page_size;
     private Optional<Integer> current_page;
     //TODO: Optional<String>
-    private Optional<List<String>> locations;
+    private Optional<List<String>> city;
     private Optional<List<String>> companies;
-    private Optional<Integer> update_time;
+    //private Optional<Integer> update_time;
     private Optional<Boolean> has_remote;
 
-    public Optional<Integer> getUpdate_time() {
-        return update_time;
+    public Optional<List<String>> getCity() {
+        return city;
     }
 
-    public void setUpdate_time(Optional<Integer> update_time) {
-        this.update_time = update_time;
+    public void setCity(Optional<List<String>> city) {
+        this.city = city;
     }
 
     public Optional<Boolean> getHas_remote() {
@@ -33,7 +33,6 @@ public class HttpEntity {
     public Optional<String> getKeywords() {
         return keywords;
     }
-
     public void setKeywords(Optional<String> keywords) {
         this.keywords = keywords;
     }
@@ -54,13 +53,7 @@ public class HttpEntity {
         this.current_page = current_page;
     }
 
-    public Optional<List<String>> getLocations() {
-        return locations;
-    }
 
-    public void setLocations(Optional<List<String>> locations) {
-        this.locations = locations;
-    }
 
     public Optional<List<String>> getCompanies() {
         return companies;
@@ -73,13 +66,12 @@ public class HttpEntity {
     public HttpEntity() {
     }
 
-    public HttpEntity(Optional<String> keywords, Optional<Integer> page_size, Optional<Integer> current_page, Optional<List<String>> locations, Optional<List<String>> companies,Optional<Integer> update_time,Optional<Boolean> has_remote) {
+    public HttpEntity(Optional<String> keywords, Optional<Integer> page_size, Optional<Integer> current_page, Optional<List<String>> city, Optional<List<String>> companies,Optional<Boolean> has_remote) {
         this.keywords = keywords;
         this.page_size = page_size;
         this.current_page = current_page;
-        this.locations = locations;
+        this.city = city;
         this.companies = companies;
-        this.update_time=update_time;
         this.has_remote=has_remote;
     }
 }

@@ -45,18 +45,17 @@ public class JobService {//service class
     }
 
     public JSONObject searchPosition(String keywords,
-                                     List<String> locations,//
-                                     List<String> companies,
+                                     List<String> companies,//
+                                     List<String> city,
                                      Integer page_size,
                                      Integer current_page,
-                                     Integer update_time,
                                      Boolean has_remote) {
         if(keywords.isBlank()){
             keywords="";
         }
         Page<Job> jobs = jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords(
                 companies,
-                locations,
+                city,
                 has_remote,
                 keywords,
                 PageRequest.of(
