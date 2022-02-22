@@ -8,6 +8,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -50,20 +51,60 @@ public class JobService {//service class
                                      Integer page_size,
                                      Integer current_page,
                                      Boolean has_remote) {
+        Pageable pageable=PageRequest.of(
+                //page starts from 0 in pageable
+                current_page - 1,
+                page_size
+        );
         if(keywords.isBlank()){
             keywords="";
         }
-        Page<Job> jobs = jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords(
-                companies,
-                city,
-                has_remote,
-                keywords,
-                PageRequest.of(
-                        //page starts from 0 in pageable
-                        current_page - 1,
-                        page_size
-                )
-        );
+        Page<Job> jobs;
+        Boolean flag_companies=companies.remove("others");
+        Boolean flag_city=city.remove("others");
+        //both contain "others"
+        if(flag_companies&&flag_city){
+            jobs=jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_Others(
+                    companies,
+                    city,
+                    has_remote,
+                    keywords,
+                    GlobalConst.TOP5_CITIES,
+                    GlobalConst.TOP5_COMPANIES,
+                    pageable
+            );
+        }
+        //companies doesn't contain "others"; city does.
+        else if(flag_city){
+            jobs=jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_cityOthers(
+                    companies,
+                    city,
+                    has_remote,
+                    keywords,
+                    GlobalConst.TOP5_CITIES,
+                    pageable
+            );
+        }
+        //city doesn't contain "others"; companies does.
+        else if(flag_companies){
+            jobs=jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_companiesOthers(
+                    companies,
+                    city,
+                    has_remote,
+                    keywords,
+                    GlobalConst.TOP5_COMPANIES,
+                    pageable
+            );
+        }
+        else{
+            jobs = jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords(
+                    companies,
+                    city,
+                    has_remote,
+                    keywords,
+                    pageable
+            );
+        }
         return returnJobs(jobs);
     }
 
