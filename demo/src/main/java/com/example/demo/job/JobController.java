@@ -35,7 +35,7 @@ public class JobController {
 
         //parser
         Boolean has_remote = null;
-        String keywords = null;
+        String keywords = "";
         List<String> city = new ArrayList<>();
         List<String> companies = new ArrayList<>();
         try {
@@ -53,7 +53,7 @@ public class JobController {
             has_remote = httpEntity.getHas_remote().get();
         }catch (Exception e){}
         //invoke search
-        return jobService.searchPosition(keywords,city,companies,page_size,current_page,has_remote);
+        return jobService.searchPosition(keywords,companies,city,page_size,current_page,has_remote);
     }
         /*return jobService.searchPosition(
                 httpEntity.getKeywords(),

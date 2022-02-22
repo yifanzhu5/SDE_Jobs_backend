@@ -14,7 +14,7 @@ import java.util.List;
 public interface JobRepository extends JpaRepository<Job, Long> {
     @Query(value = "select s from Job s where " +
             "(COALESCE(:companies, 'empty') = 'empty' or s.company in :companies) and " +
-            "(COALESCE(:locations, 'empty') = 'empty' or s.locations in :locations) and " +
+            "(COALESCE(:city, 'empty') = 'empty' or s.city in :city) and " +
             "(:has_remote is null or s.has_remote = :has_remote) and " +
             "(:keywords = '' or s.title like concat('%',:keywords ,'%') " +
             "or s.description like concat('%',:keywords ,'%') " +
@@ -26,7 +26,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "or s.preferred_qualifications like concat('%',:keywords ,'%'))")
     Page<Job> findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords(
             @Param("companies") List<String> companiesL,
-            @Param("locations") List<String> locationsL,
+            @Param("city") List<String> cityL,
             @Param("has_remote") Boolean has_remote,
             @Param("keywords") String keywords,
             Pageable pageable);
