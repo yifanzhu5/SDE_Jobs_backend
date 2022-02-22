@@ -9,17 +9,25 @@ public class HttpEntity {
     private Optional<Integer> page_size;
     private Optional<Integer> current_page;
     //TODO: Optional<String>
-    private Optional<List<String>> city;
-    private Optional<List<String>> companies;
+    private Optional<List<String>> cities;
+    private Optional<List<String>> companys;
     //private Optional<Integer> update_time;
     private Optional<Boolean> has_remote;
 
-    public Optional<List<String>> getCity() {
-        return city;
+    public Optional<List<String>> getCompanys() {
+        return companys;
     }
 
-    public void setCity(Optional<List<String>> city) {
-        this.city = city;
+    public void setCompanys(Optional<List<String>> companys) {
+        this.companys = companys;
+    }
+
+    public Optional<List<String>> getCities() {
+        return cities;
+    }
+
+    public void setCities(Optional<List<String>> cities) {
+        this.cities = cities;
     }
 
     public Optional<Boolean> getHas_remote() {
@@ -55,23 +63,17 @@ public class HttpEntity {
 
 
 
-    public Optional<List<String>> getCompanies() {
-        return companies;
-    }
 
-    public void setCompanies(Optional<List<String>> companies) {
-        this.companies = companies;
-    }
 
     public HttpEntity() {
     }
 
-    public HttpEntity(Optional<String> keywords, Optional<Integer> page_size, Optional<Integer> current_page, Optional<List<String>> city, Optional<List<String>> companies,Optional<Boolean> has_remote) {
+    public HttpEntity(Optional<String> keywords, Optional<Integer> page_size, Optional<Integer> current_page, Optional<List<String>> cities, Optional<List<String>> companys,Optional<Boolean> has_remote) {
         this.keywords = keywords;
         this.page_size = page_size;
         this.current_page = current_page;
-        this.city = city;
-        this.companies = companies;
+        this.cities = cities;
+        this.companys = companys;
         this.has_remote=has_remote;
     }
 }

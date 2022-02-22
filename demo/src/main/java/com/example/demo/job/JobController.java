@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
 
-
+@CrossOrigin(origins = "http://localhost:3001")
 @RestController
 @RequestMapping(path = "api/v1/jobs")
 public class JobController {
@@ -42,10 +42,10 @@ public class JobController {
             keywords = httpEntity.getKeywords().get();
         }catch (Exception e){}
         try {
-            city = httpEntity.getCity().get();
+            city = httpEntity.getCities().get();
         }catch (Exception e){}
         try {
-            companies = httpEntity.getCompanies().get();
+            companies = httpEntity.getCompanys().get();
         }catch (Exception e){}
         Integer page_size =httpEntity.getPage_size().get();
         Integer current_page = httpEntity.getCurrent_page().get();
