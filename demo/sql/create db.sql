@@ -5,7 +5,7 @@ CREATE TABLE `job`.`jobs` (
   `company` TEXT NOT NULL,
   `locations` TEXT NULL,
   `apply_url` TEXT NULL,
-  `from_url` VARCHAR(300) NOT NULL,
+  `from_url` VARCHAR(600) NOT NULL,
   `basic_qualifications` TEXT NULL,
   `team` TEXT NULL,
   `city` TEXT NULL,
