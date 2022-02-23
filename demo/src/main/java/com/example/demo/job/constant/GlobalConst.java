@@ -16,8 +16,7 @@ public class GlobalConst {
             "Amazon",
             "Google",
             "Shopify",
-            "Microsoft",
-            "Lockheed Martin Corporation"
+            "Microsoft"
     ));
     public final static List<String> TOP5_CITIES=new ArrayList<String>(Arrays.asList(
             "Vancouver",
