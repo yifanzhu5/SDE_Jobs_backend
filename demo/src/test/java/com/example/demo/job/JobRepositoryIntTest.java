@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//unit test
-class JobRepositoryTest {
+//integration test
+class JobRepositoryIntTest {
 
     @Test
     void findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords() {

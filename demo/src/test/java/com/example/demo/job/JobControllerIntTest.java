@@ -4,18 +4,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//unit test
-class JobServiceTest {
+//integration test
+class JobControllerIntTest {
 
     @Test
     void getAllJobs() {
     }
 
     @Test
-    void returnJobs() {
-    }
-
-    @Test
-    void searchPosition() {
+    void search() {
     }
 }

@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//unit test
-class JobServiceTest {
+//integration test
+class JobServiceIntTest {
 
     @Test
     void getAllJobs() {
