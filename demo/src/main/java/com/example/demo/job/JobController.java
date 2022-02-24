@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
 
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(path = "api/v1/jobs")
 public class JobController {
@@ -52,6 +52,8 @@ public class JobController {
         try{
             has_remote = httpEntity.getHas_remote().get();
         }catch (Exception e){}
+
+
         //invoke search
         return jobService.searchPosition(keywords,companies,city,page_size,current_page,has_remote);
     }
