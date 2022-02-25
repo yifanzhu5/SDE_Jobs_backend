@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
 @EnableWebMvc
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3001")
 @RestController
 @RequestMapping(path = "api/v1/jobs")
 public class JobController {
