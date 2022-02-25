@@ -35,15 +35,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class JobRepositoryTest {
 
-
 //    @Container
-    private static MySQLContainer mySQLContainer= (MySQLContainer) new MySQLContainer("mysql:latest")
+    private static final MySQLContainer mySQLContainer= (MySQLContainer) new MySQLContainer("mysql:latest")
         .withReuse(true);
 
     @BeforeAll
     public static void setup() {
         mySQLContainer.start();
     }
+
     @DynamicPropertySource
     public static void overrideProps(DynamicPropertyRegistry registry){
         registry.add("spring.datasource.url",mySQLContainer::getJdbcUrl);
@@ -59,7 +59,6 @@ class JobRepositoryTest {
             0,
             GlobalConst.PAGE_SIZE_MAX_20
     );
-
     private final Pageable pageable1=PageRequest.of(
             //page starts from 0 in pageable
             1,
@@ -67,16 +66,30 @@ class JobRepositoryTest {
     );
 
     @Test
-    @Sql("/data.sql")
+    @Sql("classpath:data.sql")
     void findJobsBy() {
-        Page<Job> expected0=underTest.findJobsBy(new ArrayList<>(),new ArrayList<>(),null,"",pageable0);
-        assertThat(expected0.getContent()).asList().hasSize(20);
-        Page<Job> expected1=underTest.findJobsBy(new ArrayList<>(),new ArrayList<>(),null,"",pageable1);
-        assertThat(expected1.getContent()).asList().hasSize(3);
+        //All empty, should output all data from jobs_test
+        Page<Job> expected=underTest.findJobsBy(new ArrayList<>(),new ArrayList<>(),null,"",pageable0);
+        assertThat(expected.getTotalElements()).isEqualTo(24);
+        assertThat(expected.getTotalPages()).isEqualTo(2);
+
+        //Test has_remote true/null
+        expected=underTest.findJobsBy(new ArrayList<>(),new ArrayList<>(),true,"",pageable0);
+        assertThat(expected.getTotalElements()).isEqualTo(3);
+
+        //Test keywords: count and match
+        expected=underTest.findJobsBy(new ArrayList<>(),new ArrayList<>(),null,"develop",pageable0);
+        assertThat(expected.getTotalElements()).isEqualTo(21);
+        for(int i=0;i<20;i++){
+            assertThat(expected.getContent().get(i)).asString().containsIgnoringCase("develop");
+        }
+        expected=underTest.findJobsBy(new ArrayList<>(),new ArrayList<>(),null,"develop",pageable1);
+        assertThat(expected.getContent().get(0)).asString().containsIgnoringCase("develop");
     }
 
     @Test
     void findJobsBy_cityOthers() {
+
     }
 
     @Test
