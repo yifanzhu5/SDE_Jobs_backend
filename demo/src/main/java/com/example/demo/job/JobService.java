@@ -64,7 +64,7 @@ public class JobService {//service class
         Boolean flag_city=city.remove("others");
         //both contain "others"
         if(flag_companies&&flag_city){
-            jobs=jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_Others(
+            jobs=jobRepository.findJobsBy_companiesCityOthers(
                     companies,
                     city,
                     has_remote,
@@ -76,7 +76,7 @@ public class JobService {//service class
         }
         //companies doesn't contain "others"; city does.
         else if(flag_city){
-            jobs=jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_cityOthers(
+            jobs=jobRepository.findJobsBy_cityOthers(
                     companies,
                     city,
                     has_remote,
@@ -87,7 +87,7 @@ public class JobService {//service class
         }
         //city doesn't contain "others"; companies does.
         else if(flag_companies){
-            jobs=jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_companiesOthers(
+            jobs=jobRepository.findJobsBy_companiesOthers(
                     companies,
                     city,
                     has_remote,
@@ -97,7 +97,7 @@ public class JobService {//service class
             );
         }
         else{
-            jobs = jobRepository.findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords(
+            jobs = jobRepository.findJobsBy(
                     companies,
                     city,
                     has_remote,

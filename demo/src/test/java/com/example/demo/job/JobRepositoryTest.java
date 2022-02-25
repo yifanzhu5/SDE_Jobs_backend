@@ -16,18 +16,18 @@ class JobRepositoryTest {
     private JobRepository underTest;
 
     @Test
-    void findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords() {
+    void findJobsBy() {
     }
 
     @Test
-    void findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_cityOthers() {
+    void findJobsBy_cityOthers() {
     }
 
     @Test
-    void findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_companiesOthers() {
+    void findJobsBy_companiesOthers() {
     }
 
     @Test
-    void findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_Others() {
+    void findJobsBy_companiesCityOthers() {
     }
 }

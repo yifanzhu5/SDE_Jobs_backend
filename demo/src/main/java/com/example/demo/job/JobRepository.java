@@ -24,7 +24,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "or s.team like concat('%',:keywords ,'%') " +
             "or s.company like concat('%',:keywords ,'%') " +
             "or s.preferred_qualifications like concat('%',:keywords ,'%'))")
-    Page<Job> findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords(
+    Page<Job> findJobsBy(
             @Param("companies") List<String> companiesL,
             @Param("city") List<String> cityL,
             @Param("has_remote") Boolean has_remote,
@@ -43,7 +43,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "or s.team like concat('%',:keywords ,'%') " +
             "or s.company like concat('%',:keywords ,'%') " +
             "or s.preferred_qualifications like concat('%',:keywords ,'%'))")
-    Page<Job> findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_cityOthers(
+    Page<Job> findJobsBy_cityOthers(
             @Param("companies") List<String> companiesL,
             @Param("city") List<String> cityL,
             @Param("has_remote") Boolean has_remote,
@@ -63,7 +63,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "or s.team like concat('%',:keywords ,'%') " +
             "or s.company like concat('%',:keywords ,'%') " +
             "or s.preferred_qualifications like concat('%',:keywords ,'%'))")
-    Page<Job> findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_companiesOthers(
+    Page<Job> findJobsBy_companiesOthers(
             @Param("companies") List<String> companiesL,
             @Param("city") List<String> cityL,
             @Param("has_remote") Boolean has_remote,
@@ -83,7 +83,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             "or s.team like concat('%',:keywords ,'%') " +
             "or s.company like concat('%',:keywords ,'%') " +
             "or s.preferred_qualifications like concat('%',:keywords ,'%'))")
-    Page<Job> findJobsByCompanyInAndLocationsInAndHas_remoteAndKeywords_Others(
+    Page<Job> findJobsBy_companiesCityOthers(
             @Param("companies") List<String> companiesL,
             @Param("city") List<String> cityL,
             @Param("has_remote") Boolean has_remote,
