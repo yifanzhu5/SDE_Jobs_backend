@@ -7,16 +7,18 @@ import net.sf.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Iterator;
-
+@EnableWebMvc
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(path = "api/v1/jobs")
 public class JobController {
+
     private final JobService jobService;//automatically instantiated and injected into the constructor
 
     @Autowired
