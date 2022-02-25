@@ -33,6 +33,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 //@Testcontainers
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Sql("classpath:data.sql")
 class JobRepositoryTest {
 
 
@@ -67,7 +68,6 @@ class JobRepositoryTest {
     );
 
     @Test
-    @Sql("classpath:data.sql")
     void findJobsBy() {
         //All empty, should output all data from jobs_test
         Page<Job> expected=underTest.findJobsBy(new ArrayList<>(),new ArrayList<>(),null,"",pageable0);
