@@ -10,6 +10,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 //unit test
+@DataJpaTest
 class JobRepositoryTest {
 
     @Autowired
