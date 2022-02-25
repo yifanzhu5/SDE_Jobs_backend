@@ -29,7 +29,7 @@ public class JobService {//service class
                 PageRequest.of(
                         //page starts from 0 in pageable
                         pgid - 1,
-                        GlobalConst.PAGE_SIZE_MAX
+                        GlobalConst.PAGE_SIZE_MAX_20
                 ));
         return returnJobs(jobs);
     }

@@ -10,7 +10,9 @@ public class GlobalConst {
     public static int MAX_PAGE = 100;
 
     // how many in a page - fixed
-    public static int PAGE_SIZE_MAX = 20;
+    public static int PAGE_SIZE_MAX_20 = 20;
+    public static int PAGE_SIZE_MAX_50 = 50;
+    public static int PAGE_SIZE_MAX_100 = 100;
 
     public final static List<String> TOP5_COMPANIES=new ArrayList<String>(Arrays.asList(
             "Amazon",
