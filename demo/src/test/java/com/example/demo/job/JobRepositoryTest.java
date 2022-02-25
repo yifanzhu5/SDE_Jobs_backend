@@ -2,6 +2,7 @@ package com.example.demo.job;
 
 import com.example.demo.job.entity.Job;
 import com.example.demo.job.constant.GlobalConst;
+import net.sf.json.JSONObject;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,6 +24,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -83,5 +85,44 @@ class JobRepositoryTest {
 
     @Test
     void findJobsBy_companiesCityOthers() {
+        //expected0: contains only other company and other city
+        Page<Job> expected0 = underTest.findJobsBy_companiesCityOthers(
+                new ArrayList<>(),
+                new ArrayList<>(),
+                null,
+                "",
+                GlobalConst.TOP5_CITIES,
+                GlobalConst.TOP5_COMPANIES,
+                pageable0
+        );
+        //expected1: contains Google and other company and other city
+        Page<Job> expected1 = underTest.findJobsBy_companiesCityOthers(
+                new ArrayList<>(Arrays.asList("Google")),
+                new ArrayList<>(),
+                null,
+                "",
+                GlobalConst.TOP5_CITIES,
+                GlobalConst.TOP5_COMPANIES,
+                pageable0
+        );
+        //expected2: contains other company and Toronto and other city
+        Page<Job> expected2 = underTest.findJobsBy_companiesCityOthers(
+                new ArrayList<>(),
+                new ArrayList<>(Arrays.asList("Toronto")),
+                null,
+                "",
+                GlobalConst.TOP5_CITIES,
+                GlobalConst.TOP5_COMPANIES,
+                pageable0
+        );
+
+        List<Page<Job>> expectedL = new ArrayList<>(Arrays.asList(expected0, expected1, expected2));
+        for (int i = 0; i < expectedL.size(); i++) {
+            assertThat(expectedL.get(i).getContent()).asList().hasSize(9);
+            assertThat(expectedL.get(i).getContent()).asList()
+                    .extracting("company").doesNotContain("Amazon", "Google", "Shopify", "Microsoft");
+            assertThat(expectedL.get(i).getContent()).asList()
+                    .extracting("city").doesNotContain("Vancouver", "Toronto", "Waterloo", "Montreal", "Ottawa");
+        }
     }
 }
