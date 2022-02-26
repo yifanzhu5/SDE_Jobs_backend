@@ -84,7 +84,7 @@ class JobControllerIntTest {
         Assert.assertNotNull(jsonObject.get("current_page"));
         Assert.assertNotNull(jsonObject.get("page_size"));
         JSONArray jsonArrayData = (JSONArray) jsonObject.get("jobs");
-        Assert.assertEquals(jsonArrayData.length(),3);
+        Assert.assertEquals(jsonArrayData.length(),4);
 
         map.clear();
         map.put("page_size",50);
@@ -98,8 +98,7 @@ class JobControllerIntTest {
         Assert.assertNotNull(jsonObject2.get("current_page"));
         Assert.assertNotNull(jsonObject2.get("page_size"));
         JSONArray jsonArrayData2 = (JSONArray) jsonObject2.get("jobs");
-        Assert.assertEquals(jsonArrayData2.length(),23);
-
+        Assert.assertEquals(jsonArrayData2.length(),24);
     }
 
 
