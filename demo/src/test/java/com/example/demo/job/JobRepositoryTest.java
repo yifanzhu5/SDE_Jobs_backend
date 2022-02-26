@@ -89,7 +89,6 @@ class JobRepositoryTest {
     }
 
     @Test
-    @Sql("classpath:data.sql")
     void findJobsBy_cityOthers() {
         //expected1: contains only other cities
         Page<Job> expected1 = underTest.findJobsBy_cityOthers(
@@ -132,7 +131,6 @@ class JobRepositoryTest {
     }
 
     @Test
-    @Sql("classpath:data.sql")
     void findJobsBy_companiesOthers() {
         //expected1: contains only other companies
         Page<Job> expected1 = underTest.findJobsBy_companiesOthers(
@@ -173,7 +171,6 @@ class JobRepositoryTest {
     }
 
     @Test
-    @Sql("classpath:data.sql")
     void findJobsBy_companiesCityOthers() {
         //expected1: contains only other companies and other cities
         Page<Job> expected1 = underTest.findJobsBy_companiesCityOthers(
