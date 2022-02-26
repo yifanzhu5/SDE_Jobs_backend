@@ -35,13 +35,6 @@ class JobServiceTest {
         jobService = new JobService(jobRepository);
     }
 
-    @Test
-    void getAllJobs() {
-    }
-
-    @Test
-    void returnJobs() {
-    }
 
     String keywords = "software";
     Boolean has_remote = true;
