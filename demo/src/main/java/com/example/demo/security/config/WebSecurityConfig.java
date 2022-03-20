@@ -73,6 +73,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .antMatchers("/api/v1/jobs/page/**")
                     .permitAll()
+                    .antMatchers("/api/v1/jobs/search/**")
+                    .permitAll()
                 .anyRequest().authenticated()
 
                 .and()
@@ -130,18 +132,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 //退出成功，返回json
+                .logoutUrl("/api/v1/logout")
                 .logoutSuccessHandler((request,response,authentication) -> {
-                    logger.info("logout successfully");
                     Map<String,Object> map = new HashMap<>();
                     map.put("code",200);
                     map.put("message","logout succeed");
-                    map.put("data",authentication);
                     response.setContentType("application/json;charset=utf-8");
                     PrintWriter out = response.getWriter();
                     out.write(objectMapper.writeValueAsString(map));
                     out.flush();
                     out.close();
                 })
+                //.deleteCookies("JSESSIONID")
                 .permitAll();
         //开启跨域访问
         http.cors().disable();

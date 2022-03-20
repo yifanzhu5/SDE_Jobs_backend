@@ -34,8 +34,12 @@ public class LoginTest {
     @Test
     public void testUnauthenticatedUser() throws Exception {
 
-        mvc.perform(post("/api/v1/jobs/search"))
-                .andExpect(status().isForbidden());
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("keywords","software");
+        map.put("page_size",20);
+        map.put("current_page",1);
+        String json= JSON.toJSONString(map);
+        mvc.perform(post("/api/v1/jobs/search").content(json).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
