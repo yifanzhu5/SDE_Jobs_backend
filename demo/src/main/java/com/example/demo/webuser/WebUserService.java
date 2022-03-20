@@ -37,8 +37,8 @@ public class WebUserService implements UserDetailsService{
         boolean usernameExists = webUserRepository.findByUsername(webUser.getUsername()).isPresent();
         boolean emailExists = webUserRepository.findByEmail(webUser.getEmail()).isPresent();
         ArrayList<Boolean> flg = new ArrayList<>();
-        flg.add(usernameExists);
-        flg.add(emailExists);
+        flg.add(!usernameExists);
+        flg.add(!emailExists);
         if(usernameExists || emailExists) {
             // TODO check of attributes are the same and
             // TODO if email not confirmed send confirmation email.
