@@ -23,10 +23,10 @@ public class RegistrationService {
     private final EmailSender emailSender;
 
     public JSONObject register(RegistrationRequest request) {
-        boolean isValidEmail = emailValidator.test(request.getEmail());
+        /*boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail) {
             throw new IllegalStateException("email is not valid");
-        }
+        }*/
 
         JSONObject regInfo = webUserService.signUpUser(
                 new WebUser(
@@ -46,7 +46,7 @@ public class RegistrationService {
         return regInfo;
     }
 
-    @Transactional
+    /*@Transactional
     public String confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
@@ -69,9 +69,9 @@ public class RegistrationService {
         );
 
         return "confirmed";
-    }
+    }*/
 
-    private String buildEmail(String name, String link) {
+    /*private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
@@ -138,5 +138,6 @@ public class RegistrationService {
                 "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
                 "\n" +
                 "</div></div>";
-    }
+    }*/
+
 }

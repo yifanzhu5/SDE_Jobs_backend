@@ -7,22 +7,22 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping(path = "api/v1/")
+@RequestMapping(path = "api/v1")
 @AllArgsConstructor
 public class RegistrationController {
 
     private RegistrationService registrationService;
 
-    @PostMapping(path = "register")
+    @PostMapping(path = "/register")
     public JSONObject register(RegistrationRequest request){
 
         return registrationService.register(request);
     }
 
-    @GetMapping(path = "confirm")
+    /*@GetMapping(path = "confirm")
     public String confirm(@RequestParam("token") String token) {
         return registrationService.confirmToken(token);
-    }
+    }*/
 
 
 }
