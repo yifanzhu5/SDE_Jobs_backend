@@ -7,6 +7,7 @@ import com.example.demo.webuser.WebUser;
 import com.example.demo.webuser.WebUserRole;
 import com.example.demo.webuser.WebUserService;
 import lombok.AllArgsConstructor;
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,15 +22,15 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
-    public String register(RegistrationRequest request) {
+    public JSONObject register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
         if(!isValidEmail) {
             throw new IllegalStateException("email is not valid");
         }
 
-
-        String token = webUserService.signUpUser(
+        JSONObject regInfo = webUserService.signUpUser(
                 new WebUser(
+                        request.getUsername(),
                         request.getPassword(),
                         request.getEmail(),
                         WebUserRole.USER
@@ -42,7 +43,7 @@ public class RegistrationService {
                 request.getEmail()
         );
 
-        return token;
+        return regInfo;
     }
 
     @Transactional

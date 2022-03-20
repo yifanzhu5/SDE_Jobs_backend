@@ -16,6 +16,8 @@ public interface WebUserRepository extends JpaRepository<WebUser, Long> {
 
     Optional<WebUser> findByEmail(String email);
 
+    Optional<WebUser> findByUsername(String username);
+
     @Transactional
     @Modifying
     @Query("UPDATE WebUser a " +
