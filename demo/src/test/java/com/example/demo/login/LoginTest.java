@@ -40,6 +40,22 @@ public class LoginTest {
     }
 
     @Test
+    public void testUnauthenticatedUser2() throws Exception {
+        mvc.perform(get("/api/v1/jobs/page/1"))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void loginfunction() throws Exception {
+        String result = mvc.perform(post("/api/v1/login").param("username","zhuliang").param("password","Gzl123")).andReturn().getResponse().getContentAsString();
+        JSONObject jsonObject = new JSONObject(result);
+        Assert.assertNotNull(jsonObject.get("isMatch"));
+        Assert.assertNotNull(jsonObject.get("username"));
+        Assert.assertNotNull(jsonObject.get("email"));
+    }
+
+    @Test
     @WithMockUser
     void login() throws Exception {
         Authentication authentication = SecurityContextHolder.getContext()
