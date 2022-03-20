@@ -59,6 +59,17 @@ public class LoginTest {
         Assert.assertNotNull(jsonObject.get("email"));
     }
 
+
+    @Test
+    @WithMockUser
+    void logout() throws Exception {
+        String result = mvc.perform(post("/api/v1/logout")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        JSONObject jsonObject = new JSONObject(result);
+        Assert.assertNotNull(jsonObject.get("code"));
+        Assert.assertNotNull(jsonObject.get("message"));
+
+    }
+
     @Test
     @WithMockUser
     void login() throws Exception {
@@ -76,5 +87,7 @@ public class LoginTest {
         Assert.assertNotNull(jsonObject.get("current_page"));
         Assert.assertNotNull(jsonObject.get("page_size"));
     }
+
+
 
 }
