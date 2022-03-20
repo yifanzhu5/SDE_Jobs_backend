@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,25 +25,37 @@ public class WebUserService implements UserDetailsService{
     private final static String USER_NOT_FOUND = "user with email %s not found";
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return webUserRepository.findByEmail(email).orElseThrow(() ->
-                new UsernameNotFoundException(String.format(USER_NOT_FOUND, email)));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return webUserRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException(String.format(USER_NOT_FOUND, username)));
     }
 
-    public String signUpUser(WebUser webUser) {
-        boolean userExists = webUserRepository.findByEmail(webUser.getEmail())
+    public ArrayList<String> signUpUser(WebUser webUser) {
+        ArrayList<String> errmsg = new ArrayList<String>();
+        boolean emailExists = webUserRepository.findByEmail(webUser.getEmail())
+                .isPresent();
+        if(emailExists) {
+            // TODO check of attributes are the same and
+            // TODO if email not confirmed send confirmation email.
+            String msg = "email fail";
+            errmsg.add(msg);
+        }
+        boolean userExists = webUserRepository.findByUsername(webUser.getUsername())
                 .isPresent();
         if(userExists) {
             // TODO check of attributes are the same and
             // TODO if email not confirmed send confirmation email.
-            throw new IllegalStateException("user already exists");
+            String msg = "user fail";
+            errmsg.add(msg);
+        }
+        if (!errmsg.isEmpty()){
+            return errmsg;
         }
 
         String encodedPassword = bCryptPasswordEncoder
                 .encode(webUser.getPassword());
 
         webUser.setPassword(encodedPassword);
-
         webUserRepository.save(webUser);
 
         String token = UUID.randomUUID().toString();
@@ -55,7 +69,9 @@ public class WebUserService implements UserDetailsService{
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        return token;
+        ArrayList<String> msg = new ArrayList<String>();
+        msg.add(token);
+        return msg;
     }
 
     public int enableWebUser(String email) {

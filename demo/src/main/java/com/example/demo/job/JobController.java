@@ -24,7 +24,7 @@ public class JobController {
         this.jobService = jobService;//dependency injection
     }
 
-    @GetMapping("page/{pgid}")
+    @GetMapping("/page/{pgid}")
     public JSONObject getAllJobs(@PathVariable int pgid) {//List<Job>
         return jobService.getAllJobs(pgid);
     }

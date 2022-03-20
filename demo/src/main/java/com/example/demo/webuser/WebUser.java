@@ -1,6 +1,5 @@
 package com.example.demo.webuser;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +18,7 @@ import java.util.Collections;
 @NoArgsConstructor
 @Entity
 public class WebUser implements UserDetails {
+
 
     @Id
     @SequenceGenerator(
@@ -42,9 +42,10 @@ public class WebUser implements UserDetails {
     private Boolean locked = false;
     private Boolean enabled = false;
 
-    public WebUser(String password, String email, WebUserRole webUserRole) {
+    public WebUser(String password, String email, String username, WebUserRole webUserRole) {
         this.password = password;
         this.email = email;
+        this.username=username;
         this.webUserRole = webUserRole;
     }
 
