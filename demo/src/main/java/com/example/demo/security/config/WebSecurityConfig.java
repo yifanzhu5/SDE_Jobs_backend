@@ -1,6 +1,7 @@
 package com.example.demo.security.config;
 
 import com.alibaba.fastjson.JSON;
+import com.example.demo.security.util.JwtUtil;
 import com.example.demo.webuser.WebUser;
 import com.example.demo.webuser.WebUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +29,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import javax.servlet.FilterChain;
@@ -45,9 +48,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final WebUserService webUserService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     private static final Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
 
 
     @Override
@@ -56,17 +64,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(daoAuthenticationProvider())
                 .httpBasic()
                 //When authentication is required, prompt in json format
+                // set url without authentication
                 .authenticationEntryPoint((request,response,authException) -> {
                     response.setContentType("application/json;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     PrintWriter out = response.getWriter();
                     Map<String,Object> map = new HashMap<>();
-                    map.put("message","please sign in");
+                    map.put("username","");
+                    map.put("password","");
                     out.write(objectMapper.writeValueAsString(map));
                     out.flush();
                     out.close();
                 })
-                // set url without authentication
+
                 .and()
                 .authorizeRequests()
                     .antMatchers("/api/v1/register/**")
@@ -75,7 +85,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .antMatchers("/api/v1/jobs/search/**")
                     .permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().authenticated().and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
                 .formLogin() //使用自带的登录
@@ -90,12 +102,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     Map<String,Object> map = new HashMap<>();
                     if (ex instanceof UsernameNotFoundException || ex instanceof BadCredentialsException) {
                         map.put("isMatch",false);
-                        map.put("username", "");
-                        map.put("email", "");
-                    } else if (ex instanceof DisabledException) {
-                        map.put("message","account disabled");
-                    } else {
-                        map.put("message","login failed!");
                     }
                     out.write(objectMapper.writeValueAsString(map));
                     out.flush();
@@ -106,9 +112,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     logger.info("login succeed");
                     Map<String,Object> map = new HashMap<>();
                     map.put("isMatch",true);
-                    map.put("username", authentication.getName());
                     WebUser res = (WebUser) authentication.getPrincipal();
-                    map.put("email", res.getEmail());
+                    String jwt = jwtUtil.generateToken(res);
+                    map.put("token",jwt);
                     response.setContentType("application/json;charset=utf-8");
                     PrintWriter out = response.getWriter();
                     out.write(objectMapper.writeValueAsString(map));
@@ -149,6 +155,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().disable();
         //开启模拟请求，比如API POST测试工具的测试，不开启时，API POST为报403错误
         http.csrf().disable();
+
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 

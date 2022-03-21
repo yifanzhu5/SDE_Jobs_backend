@@ -1,13 +1,12 @@
 package com.example.demo.webuser;
 
-import com.example.demo.job.entity.Job;
-import com.example.demo.registration.RegistrationRequest;
 import com.example.demo.registration.token.ConfirmationToken;
 import com.example.demo.registration.token.ConfirmationTokenService;
+import com.example.demo.security.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.springframework.data.domain.Page;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +24,8 @@ public class WebUserService implements UserDetailsService{
     private final WebUserRepository webUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+   // private final AuthenticationManager authenticationManager;
+    //private final JwtUtil jwtUtil;
     private final static String USER_NOT_FOUND = "username %s not found";
 
     @Override
@@ -79,4 +80,14 @@ public class WebUserService implements UserDetailsService{
         jsonObject.put("email", webUser.getEmail());
         return jsonObject;
     }
+
+    /*public JwtResponse login(JwtRequest request) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        WebUser webUser = (WebUser) authentication.getPrincipal();
+        String username = webUser.getUsername();
+        String jwt = jwtUtil.generateToken(webUser);
+        return new JwtResponse(jwt);
+    }*/
 }

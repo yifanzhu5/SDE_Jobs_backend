@@ -55,8 +55,6 @@ public class LoginTest {
         String result = mvc.perform(post("/api/v1/login").param("username","zhuliang").param("password","Gzl123")).andReturn().getResponse().getContentAsString();
         JSONObject jsonObject = new JSONObject(result);
         Assert.assertNotNull(jsonObject.get("isMatch"));
-        Assert.assertNotNull(jsonObject.get("username"));
-        Assert.assertNotNull(jsonObject.get("email"));
     }
 
 
