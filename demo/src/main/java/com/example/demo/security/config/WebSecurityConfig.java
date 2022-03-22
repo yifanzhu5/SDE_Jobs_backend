@@ -31,6 +31,11 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -40,6 +45,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+
+
 
 @Configuration
 @AllArgsConstructor
@@ -57,9 +64,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+    private CorsConfigurationSource CorsConfigurationSource() {
+        CorsConfigurationSource source =   new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("*");    //同源配置，表示任何请求都视为同源，若需指定ip和端口可以改为如“localhost：8080”，多个以“，”分隔；
+        corsConfiguration.addAllowedHeader("*");//header，允许哪些header，本案中使用的是token，此处可将替换为token；
+        corsConfiguration.addAllowedMethod("*");    //允许的请求方法，PSOT、GET等
+        ((UrlBasedCorsConfigurationSource) source).registerCorsConfiguration("/**",corsConfiguration); //配置允许跨域访问的url
+        return source;
+    }
+
+    /*@Bean
+    public SavedRequestAwareAuthenticationSuccessHandler successHandler() {
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+        successHandler.setTargetUrlParameter("/succeslogin");
+        return successHandler;
+    }*/
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        http.cors().configurationSource(CorsConfigurationSource());
         http
                 .authenticationProvider(daoAuthenticationProvider())
                 .httpBasic()
@@ -68,6 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint((request,response,authException) -> {
                     response.setContentType("application/json;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.addHeader("Access-Allow-Control-Origin","*");
                     PrintWriter out = response.getWriter();
                     Map<String,Object> map = new HashMap<>();
                     map.put("username","");
@@ -85,6 +112,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .antMatchers("/api/v1/jobs/search/**")
                     .permitAll()
+                    .antMatchers("/api/v1/login")
+                    .permitAll()
+                    .antMatchers("/api/v1/user")
+                    .permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -98,6 +129,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     logger.info("login failed");
                     response.setContentType("application/json;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    //response.addHeader("Access-Allow-Control-Origin","*");
                     PrintWriter out = response.getWriter();
                     Map<String,Object> map = new HashMap<>();
                     if (ex instanceof UsernameNotFoundException || ex instanceof BadCredentialsException) {
@@ -106,6 +138,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     out.write(objectMapper.writeValueAsString(map));
                     out.flush();
                     out.close();
+
                 })
                 //登录成功，返回json
                 .successHandler((request,response,authentication) -> {
@@ -114,8 +147,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     map.put("isMatch",true);
                     WebUser res = (WebUser) authentication.getPrincipal();
                     String jwt = jwtUtil.generateToken(res);
+
                     map.put("token",jwt);
+                    response.setStatus(HttpServletResponse.SC_OK);
                     response.setContentType("application/json;charset=utf-8");
+                    //response.addHeader("Access-Allow-Control-Origin","*");
                     PrintWriter out = response.getWriter();
                     out.write(objectMapper.writeValueAsString(map));
                     out.flush();
@@ -152,7 +188,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.deleteCookies("JSESSIONID")
                 .permitAll();
         //开启跨域访问
-        http.cors().disable();
+        //http.cors().disable();
         //开启模拟请求，比如API POST测试工具的测试，不开启时，API POST为报403错误
         http.csrf().disable();
 
