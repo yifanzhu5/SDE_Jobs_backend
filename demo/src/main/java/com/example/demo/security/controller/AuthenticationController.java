@@ -16,14 +16,21 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "api/v1")
 public class AuthenticationController {
-    @Autowired
-    private JwtUtil jwtUtil;
+
 
     @GetMapping(path = "/user")
     public ResponseEntity<?> login() {
-        WebUser webUser = (WebUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok(new UserInfoResponse(webUser.getUsername(), webUser.getEmail()));
+        //TODO try catch
+        try{
+            WebUser webUser = (WebUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return ResponseEntity.ok(new UserInfoResponse(webUser.getUsername(), webUser.getEmail()));
+        }catch (Exception e){
+            //TODO
+           return ResponseEntity.ok(new JSONObject());
+        }
     }
+
+    //TODO update favorite jobs ost mapping
 
 
 }

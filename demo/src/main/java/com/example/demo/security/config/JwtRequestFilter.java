@@ -51,8 +51,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         try {
            username = jwtUtil.getUsernameFromToken(token);
         } catch (IllegalArgumentException e) {
-
+            throw e;
         } catch (ExpiredJwtException e) {
+            throw e;
 
         }
 

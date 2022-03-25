@@ -19,6 +19,7 @@ import java.util.Collections;
 @NoArgsConstructor
 @Entity
 public class WebUser implements UserDetails {
+    //TODO
 
     @Id
     @SequenceGenerator(
