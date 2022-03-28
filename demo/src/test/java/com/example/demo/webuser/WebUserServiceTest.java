@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -34,13 +35,15 @@ class WebUserServiceTest {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Mock
     private ConfirmationTokenService confirmationTokenService;
+    @Mock
+    private EntityManager em;
 
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
         //jobRepository = Mockito.mock(JobRepository.class);
-        webUserService = new WebUserService(webUserRepository,bCryptPasswordEncoder,confirmationTokenService);
+        webUserService = new WebUserService(webUserRepository,bCryptPasswordEncoder,confirmationTokenService,em);
         Mockito.when(webUserRepository.findByUsername("U1")).thenReturn(Optional.of(new WebUser()));
         Mockito.when(webUserRepository.findByEmail("E1")).thenReturn(Optional.of(new WebUser()));
         Mockito.when(webUserRepository.findByUsername("U2")).thenReturn(Optional.empty());

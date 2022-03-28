@@ -1,17 +1,20 @@
 package com.example.demo.webuser;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang.ObjectUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,12 +45,17 @@ public class WebUser implements UserDetails {
     private String lastTime;   //上次登录时间
     private Boolean locked = false;
     private Boolean enabled = false;
+    @ElementCollection
+    //@CollectionTable(name = "fav_list", joinColumns = @JoinColumn(name = "web_user_id"))
+    private List<Long> favList;
 
     public WebUser(String username, String password, String email, WebUserRole webUserRole) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.webUserRole = webUserRole;
+        favList = new ArrayList<>();
+        favList.add(0L);
     }
 
     @Override

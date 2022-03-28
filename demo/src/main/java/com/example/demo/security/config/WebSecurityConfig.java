@@ -5,6 +5,7 @@ import com.example.demo.security.util.JwtUtil;
 import com.example.demo.webuser.WebUser;
 import com.example.demo.webuser.WebUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -95,10 +96,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     response.setContentType("application/json;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     response.addHeader("Access-Allow-Control-Origin","*");
+                    response.setStatus(400);
                     PrintWriter out = response.getWriter();
                     Map<String,Object> map = new HashMap<>();
-                    map.put("username","");
-                    map.put("password","");
+                    map.put("errMsg", "Login expired. Please login!");
                     out.write(objectMapper.writeValueAsString(map));
                     out.flush();
                     out.close();
@@ -114,8 +115,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .antMatchers("/api/v1/login")
                     .permitAll()
-                    .antMatchers("/api/v1/user")
-                    .permitAll()
+                    //.antMatchers("/api/v1/user")
+                    //.permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -185,7 +186,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     out.flush();
                     out.close();
                 })
-                //.deleteCookies("JSESSIONID")
+                .deleteCookies("JSESSIONID")
                 .permitAll();
         //开启跨域访问
         //http.cors().disable();

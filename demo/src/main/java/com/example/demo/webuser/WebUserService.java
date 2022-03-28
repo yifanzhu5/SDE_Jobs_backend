@@ -2,9 +2,8 @@ package com.example.demo.webuser;
 
 import com.example.demo.registration.token.ConfirmationToken;
 import com.example.demo.registration.token.ConfirmationTokenService;
-import com.example.demo.security.util.JwtUtil;
 import lombok.AllArgsConstructor;
-import net.sf.json.JSONArray;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,13 +11,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Transactional
+@Slf4j
 public class WebUserService implements UserDetailsService{
 
     private final WebUserRepository webUserRepository;
@@ -27,6 +31,9 @@ public class WebUserService implements UserDetailsService{
    // private final AuthenticationManager authenticationManager;
     //private final JwtUtil jwtUtil;
     private final static String USER_NOT_FOUND = "username %s not found";
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -81,13 +88,24 @@ public class WebUserService implements UserDetailsService{
         return jsonObject;
     }
 
-    /*public JwtResponse login(JwtRequest request) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        WebUser webUser = (WebUser) authentication.getPrincipal();
-        String username = webUser.getUsername();
-        String jwt = jwtUtil.generateToken(webUser);
-        return new JwtResponse(jwt);
-    }*/
+    public void updateFav(WebUser webUser, boolean isAdd, Long jobId) throws Exception {
+
+        try {
+            if(isAdd) {
+                if(!webUser.getFavList().contains(jobId)) {
+                    webUser.getFavList().add(jobId);
+                    em.merge(webUser);
+                }
+
+            }
+            else {
+                webUser.getFavList().remove(jobId);
+                em.merge(webUser);
+            }
+        }catch (Exception e) {
+            log.error("Unable to update favorite list");
+            throw new Exception(e);
+        }
+
+    }
 }
