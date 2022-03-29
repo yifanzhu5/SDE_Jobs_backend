@@ -38,7 +38,7 @@ public class AuthenticationController {
             return ResponseEntity.ok(new UserInfoResponse(webUser.getUsername(), webUser.getEmail(),test));
         }catch (Exception e){
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("msg", "Invalid Token!");
+            jsonObject.put("errMsg", "Login expired. Please login!");
             return ResponseEntity.badRequest().body(jsonObject);
         }
     }
