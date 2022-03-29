@@ -86,6 +86,27 @@ public class LoginTest {
         Assert.assertNotNull(jsonObject.get("page_size"));
     }
 
+    @Test
+    @WithMockUser
+    void update_favlist() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        Map<String,Object> map = new HashMap<String,Object>();
+        long a = 12345678903333L;
+        map.put("id",a);
+        map.put("isAdd",true);
+        String json= JSON.toJSONString(map);
+        String result = mvc.perform(post("/api/v1/updateFavJobs").content(json).contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
+        Assert.assertEquals("{\"errMsg\":\"Login expired. Please login!\"}",result);
+    }
+
+    @Test
+    void user() throws Exception {
+        Map<String,Object> map = new HashMap<String,Object>();
+        String result = mvc.perform(get("/api/v1/user")).andReturn().getResponse().getContentAsString();
+        Assert.assertEquals("{\"errMsg\":\"Login expired. Please login!\"}",result);
+        //System.out.println(result);
+    }
 
 
 }

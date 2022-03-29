@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -24,8 +27,20 @@ public class AuthenticationController {
 
     @GetMapping(path = "/user")
     public ResponseEntity<?> login() {
+        try{
             WebUser webUser = (WebUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return ResponseEntity.ok(new UserInfoResponse(webUser.getUsername(), webUser.getEmail(), webUser.getFavList()));
+            List<Long> test = webUser.getFavList();
+            for (int i =0 ; i < test.size();i++){
+                if (test.get(i).equals(0L)) {
+                    test.remove(i);
+                }
+            }
+            return ResponseEntity.ok(new UserInfoResponse(webUser.getUsername(), webUser.getEmail(),test));
+        }catch (Exception e){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("msg", "Invalid Token!");
+            return ResponseEntity.badRequest().body(jsonObject);
+        }
     }
 
     @PostMapping(path = "/updateFavJobs")
@@ -40,7 +55,7 @@ public class AuthenticationController {
             return ResponseEntity.ok(jsonObject);
 
         }catch (Exception e) {
-            jsonObject.put("errMsg", "Network error! Unable to update favorite list!");
+            jsonObject.put("errMsg", "Login expired. Please login!");
             return ResponseEntity.badRequest().body(jsonObject);
         }
     }
