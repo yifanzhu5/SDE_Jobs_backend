@@ -5,6 +5,7 @@ import java.util.Optional;
 
 
 public class HttpEntity {
+    private Optional<List<Long>> ids;
     private Optional<String> keywords;
     private Optional<Integer> page_size;
     private Optional<Integer> current_page;
@@ -13,6 +14,15 @@ public class HttpEntity {
     private Optional<List<String>> companys;
     //private Optional<Integer> update_time;
     private Optional<Boolean> has_remote;
+
+
+    public Optional<List<Long>> getIds() {
+        return ids;
+    }
+
+    public void setIds(Optional<List<Long>> ids) {
+        this.ids = ids;
+    }
 
     public Optional<List<String>> getCompanys() {
         return companys;

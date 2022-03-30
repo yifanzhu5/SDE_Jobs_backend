@@ -108,6 +108,20 @@ public class JobService {//service class
         return returnJobs(jobs);
     }
 
+
+
+    public JSONObject searchPositionByjobid(List<Long> ids,Integer page_size, Integer current_page){
+        Pageable pageable=PageRequest.of(
+                //page starts from 0 in pageable
+                current_page - 1,
+                page_size
+        );
+        Page<Job> jobs;
+        jobs=jobRepository.findByJobid(ids,pageable);
+        return returnJobs(jobs);
+    }
+
+
 //    @Transactional
 //    public void updateJob(Long jobId, String name, String href) {
 //        Job job = jobRepository.findById(jobId).orElseThrow(() -> new IllegalStateException(

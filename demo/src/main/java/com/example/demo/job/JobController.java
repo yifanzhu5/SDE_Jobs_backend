@@ -33,29 +33,36 @@ public class JobController {
     @ResponseBody
     public JSONObject search(@RequestBody HttpEntity httpEntity) {
 
-        //parser
-        Boolean has_remote = null;
-        String keywords = "";
-        List<String> city = new ArrayList<>();
-        List<String> companies = new ArrayList<>();
         try {
-            keywords = httpEntity.getKeywords().get();
-        }catch (Exception e){}
-        try {
-            city = httpEntity.getCities().get();
-        }catch (Exception e){}
-        try {
-            companies = httpEntity.getCompanys().get();
-        }catch (Exception e){}
-        Integer page_size =httpEntity.getPage_size().get();
-        Integer current_page = httpEntity.getCurrent_page().get();
-        try{
-            has_remote = httpEntity.getHas_remote().get();
-        }catch (Exception e){}
+            List<Long> ids = httpEntity.getIds().get();
+            Integer page_size =httpEntity.getPage_size().get();
+            Integer current_page = httpEntity.getCurrent_page().get();
+            return jobService.searchPositionByjobid(ids,page_size,current_page);
+        }catch (Exception e){
+            //parser
+            Boolean has_remote = null;
+            String keywords = "";
+            List<String> city = new ArrayList<>();
+            List<String> companies = new ArrayList<>();
+            try {
+                keywords = httpEntity.getKeywords().get();
+            }catch (Exception a){}
+            try {
+                city = httpEntity.getCities().get();
+            }catch (Exception a){}
+            try {
+                companies = httpEntity.getCompanys().get();
+            }catch (Exception a){}
+            Integer page_size =httpEntity.getPage_size().get();
+            Integer current_page = httpEntity.getCurrent_page().get();
+            try{
+                has_remote = httpEntity.getHas_remote().get();
+            }catch (Exception a){}
+            //invoke search
+            return jobService.searchPosition(keywords,companies,city,page_size,current_page,has_remote);
+        }
 
 
-        //invoke search
-        return jobService.searchPosition(keywords,companies,city,page_size,current_page,has_remote);
     }
         /*return jobService.searchPosition(
                 httpEntity.getKeywords(),
