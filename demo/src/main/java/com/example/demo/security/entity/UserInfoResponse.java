@@ -12,6 +12,6 @@ import java.util.List;
 public class UserInfoResponse implements Serializable {
     private String username;
     private String email;
-    private List<Long> favList;
+    private List<Long> favJobs;
 
 }
