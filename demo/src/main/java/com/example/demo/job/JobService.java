@@ -117,7 +117,7 @@ public class JobService {//service class
                 page_size
         );
         Page<Job> jobs;
-        jobs=jobRepository.findByJobid(ids,pageable);
+        jobs=jobRepository.findByJobId(ids,pageable);
         return returnJobs(jobs);
     }
 

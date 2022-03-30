@@ -91,4 +91,9 @@ public interface JobRepository extends JpaRepository<Job, Long> {
             @Param("top5_cities") List<String> top5_cities,
             @Param("top5_companies") List<String> top5_companies,
             Pageable pageable);
+
+    @Query(value = "select s from Job s where s.id in :jobId")
+    Page<Job> findByJobId(
+            @Param("jobId") List<Long> id,
+            Pageable pageable);
 }
