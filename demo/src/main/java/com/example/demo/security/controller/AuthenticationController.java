@@ -55,7 +55,10 @@ public class AuthenticationController {
             return ResponseEntity.ok(jsonObject);
 
         }catch (Exception e) {
-            jsonObject.put("errMsg", "Login expired. Please login!");
+            if(e instanceof ClassCastException)
+                jsonObject.put("errMsg", "Login expired. Please login!");
+            else
+                jsonObject.put("errMsg", "Unable to update favorite list");
             return ResponseEntity.badRequest().body(jsonObject);
         }
     }

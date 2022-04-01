@@ -116,6 +116,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .antMatchers("/api/v1/user")
                     .permitAll()
+                    .antMatchers("/api/v1/updateFavJobs")
+                    .permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
