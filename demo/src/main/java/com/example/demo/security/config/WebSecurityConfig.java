@@ -96,7 +96,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     response.setContentType("application/json;charset=utf-8");
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     response.addHeader("Access-Allow-Control-Origin","*");
-                    response.setStatus(400);
                     PrintWriter out = response.getWriter();
                     Map<String,Object> map = new HashMap<>();
                     map.put("errMsg", "Login expired. Please login!");
@@ -115,8 +114,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .antMatchers("/api/v1/login")
                     .permitAll()
-                    //.antMatchers("/api/v1/user")
-                    //.permitAll()
+                    .antMatchers("/api/v1/user")
+                    .permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

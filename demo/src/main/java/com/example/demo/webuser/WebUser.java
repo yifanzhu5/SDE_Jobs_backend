@@ -44,7 +44,7 @@ public class WebUser implements UserDetails {
     private String lastIp;     //上次登录IP
     private String lastTime;   //上次登录时间
     private Boolean locked = false;
-    private Boolean enabled = false;
+    private Boolean enabled = true;
     @ElementCollection
     //@CollectionTable(name = "fav_list", joinColumns = @JoinColumn(name = "web_user_id"))
     private List<Long> favList;
